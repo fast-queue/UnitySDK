@@ -1,31 +1,40 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UB.SimpleCS;
 using UnityEngine.UI;
+using FQ;
 
 public class Test : MonoBehaviour {
 	public Text resText;
+	public Text textName;
+	public Text id;
 
-	RestApi api = RestApi.Instance;
-	string url = "http://tcc-andre.ddns.net/queue";
-	string key = "minhavidaeandarporestepais";
+	private Dictionary<string, MyQueueClass> maps;
+
+	const string url = "http://tcc-andre.ddns.net/queue";
+	const string key = "minhavidaeandarporestepais";
+	RestApi api;
 
 	void Start(){
+		api = new RestApi(url, key);
+		maps = new Dictionary<string, MyQueueClass> ();
 	}
 
 	public void getAllQueue(){
-		var d = api.Send<Body>(RequestType.Get, url, key, null);
+//		var d = api.Send(RequestType.Get, url, key, null);
 
-		resText.text = d;
-		Debug.Log (d);
+//		resText.text = d;
+//		Debug.Log (d);
 	}
 
 	public void addQueue(string b){
-		var d = api.Send<Body>(RequestType.Post, url, key, new Body(b));
+		MyQueueClass body = new MyQueueClass ("andre", 32);
+		var resp = api.addQueue<MyQueueClass> (body);
+		maps.Add (resp._id, resp);
 
-		resText.text = d;
-		Debug.Log (d);
+		// set text on editor
+		id.text = resp._id;
+		textName.text = resp.name;
 	}
 
 }
