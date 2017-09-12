@@ -21,10 +21,10 @@ public class Test : MonoBehaviour {
 	}
 
 	public void getAllQueue(){
-//		var d = api.Send(RequestType.Get, url, key, null);
+		MyQueueClass[] x = api.getAllQueue<MyQueueClass>();
 
-//		resText.text = d;
-//		Debug.Log (d);
+		resText.text = x.Length + " Arrays";
+		
 	}
 
 	public void addQueue(string b){
