@@ -21,7 +21,7 @@ namespace FQ {
 			this.key = key;
         }
 
-		public T addQueue<T>(T obj) where T:FQ.BaseBody {
+		public T addQueue<T>(T obj) where T: FQ.BaseBody {
 			T retObj = obj;
 			var type = RequestType.Post;
 			if(obj == null){
@@ -32,6 +32,14 @@ namespace FQ {
 			T response = convertPostResponse<T> (request);
 			retObj._id = response._id;
 			return retObj;
+		}
+
+		public T[] getAllQueue<T>(){
+			var type = RequestType.Get;
+			var request = this.Send (type, null);
+			var x = "{ objects:" + request + "}";
+			var response = convertPostResponse<getAllToWork<T>> (x);
+			return response.objects;
 		}
 			
 		private string Send(RequestType apiRequestType, string body)
@@ -84,4 +92,8 @@ namespace FQ {
 			return serialized;
 		}
     }
+	class getAllToWork<T>{
+		
+		public T []objects;
+	}
 }
