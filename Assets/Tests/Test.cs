@@ -22,14 +22,25 @@ public class Test : MonoBehaviour {
 		maps = new Dictionary<string, MyQueueClass> ();
 	}
 
+	private void updateMap(MyQueueClass []q){
+		maps.Clear();
+		foreach (var item in q)
+		{
+			maps.Add(item._id, item);
+		}
+	}
+
 	public void getAllQueue(){
 		MyQueueClass[] x = api.getAllQueue<MyQueueClass>();
 		queue = x[0]._id;
 
-		Debug.Log(queue);
+		// does the memory map update
+		updateMap(x);
+
+		textName.text = x[0].name;
+		id.text = x[0]._id;
 
 		string output = "";
-
 		for (int i = 0; i < x.Length; i++)
 		{
 			output+= "{ name: " + x[i].name + ", _id: " + x[i]._id + "}";
@@ -37,6 +48,7 @@ public class Test : MonoBehaviour {
 				output += ",";
 			}
 		}
+
 
 		resText.text = output;
 	}
@@ -53,8 +65,7 @@ public class Test : MonoBehaviour {
 
 	public void addPlayerToQueue(string name){
 		MyPlayerClass player = new MyPlayerClass(name);
-		api.addPlayerToQueue<MyPlayerClass>(queue, player);
-
+		var pl = api.addPlayerToQueue<MyPlayerClass>(queue, player);
 	}
 
 }
