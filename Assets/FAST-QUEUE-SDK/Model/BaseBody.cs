@@ -9,6 +9,11 @@ namespace FQ {
 		public BaseBody(){
 		}
 		public string _id;
+
+		protected string toJson(){
+			return "{ _id: " + _id + " } "; 
+		}
 	}
+
 
 }
