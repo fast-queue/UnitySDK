@@ -11,42 +11,63 @@ namespace FQ {
     public class RestApi
     {
 		private string key;
-		private string url;
+		private string baseUrl;
 
 		public RestApi(){}
 
 		public RestApi(string url, string key)
 		{
-			this.url = url;
+			this.baseUrl = url;
 			this.key = key;
         }
 
 		public T addQueue<T>(T obj) where T: FQ.BaseBody {
+			var url = baseUrl + "/queue";
+			return add(url, obj);
+		}
+
+		public T[] getAllQueue<T>() {
+			var url = baseUrl + "/queue";
+			return get<T>(url);
+		}
+
+		public T[] getAllPlayersOnQueue<T>(string _id) {
+			var url = baseUrl + "/queue/" + _id + "/players";
+			return get<T>(url);
+		}
+
+		public T addPlayerToQueue<T>(string _id, T obj) where T: FQ.BaseBody{
+			var url = baseUrl + "/queue/" + _id + "/players";
+			return add<T>(url, obj);
+		}
+
+		private T add<T>(string url, T obj) where T: FQ.BaseBody {
 			T retObj = obj;
 			var type = RequestType.Post;
 			if(obj == null){
 				throw new Exception ("No object recived on post!");
 			}
 			var sendObj = objectToJSON(obj);
-			var request = this.Send (type, sendObj);
+			var request = this.Send (url, type, sendObj);
 			T response = convertPostResponse<T> (request);
 			retObj._id = response._id;
 			return retObj;
 		}
 
-		public T[] getAllQueue<T>(){
+		private T[] get<T>(string url){
 			var type = RequestType.Get;
-			var request = this.Send (type, null);
+			var request = this.Send (url, type, null);
 			var x = "{ objects:" + request + "}";
 			var response = convertPostResponse<getAllToWork<T>> (x);
 			return response.objects;
 		}
+
 			
-		private string Send(RequestType apiRequestType, string body)
+		private string Send(string url, RequestType apiRequestType, string body)
 		{
-			var request = HttpWebRequest.Create(new System.Uri(this.url));
+			var request = HttpWebRequest.Create(new System.Uri(url));
 			request.Headers ["API-KEY"] = this.key;
-            request.Timeout = 1000; //milliseconds
+            request.Timeout = 21000; //milliseconds
 			if (apiRequestType == RequestType.Get) {
 				request.Method = "GET";
 			} else if (apiRequestType == RequestType.Post) {

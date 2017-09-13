@@ -11,9 +11,11 @@ public class Test : MonoBehaviour {
 
 	private Dictionary<string, MyQueueClass> maps;
 
-	const string url = "http://tcc-andre.ddns.net/queue";
+	const string url = "http://tcc-andre.ddns.net";
 	const string key = "minhavidaeandarporestepais";
+
 	RestApi api;
+	string queue = "";
 
 	void Start(){
 		api = new RestApi(url, key);
@@ -22,19 +24,37 @@ public class Test : MonoBehaviour {
 
 	public void getAllQueue(){
 		MyQueueClass[] x = api.getAllQueue<MyQueueClass>();
+		queue = x[0]._id;
 
-		resText.text = x.Length + " Arrays";
-		
+		Debug.Log(queue);
+
+		string output = "";
+
+		for (int i = 0; i < x.Length; i++)
+		{
+			output+= "{ name: " + x[i].name + ", _id: " + x[i]._id + "}";
+			if(i != x.Length){
+				output += ",";
+			}
+		}
+
+		resText.text = output;
 	}
 
-	public void addQueue(string b){
-		MyQueueClass body = new MyQueueClass ("andre", 32);
+	public void addQueue(string name){
+		MyQueueClass body = new MyQueueClass (name, 32);
 		var resp = api.addQueue<MyQueueClass> (body);
 		maps.Add (resp._id, resp);
 
 		// set text on editor
 		id.text = resp._id;
 		textName.text = resp.name;
+	}
+
+	public void addPlayerToQueue(string name){
+		MyPlayerClass player = new MyPlayerClass(name);
+		api.addPlayerToQueue<MyPlayerClass>(queue, player);
+
 	}
 
 }
