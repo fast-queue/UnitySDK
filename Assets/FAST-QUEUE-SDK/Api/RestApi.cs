@@ -26,17 +26,26 @@ namespace FQ {
 			return add(url, obj);
 		}
 
-		public T[] getAllQueue<T>() {
+		public T[] getQueue<T>() {
 			var url = baseUrl + "/queue";
 			return get<T>(url);
 		}
+		public T[] getQueue<T>(string id) {
+			var url = baseUrl + "/queue/" + id;
+			return get<T>(url);
+		}
 
-		public T[] getAllPlayersOnQueue<T>(string _id) {
+		public T[] getPlayers<T>(string _id) {
 			var url = baseUrl + "/queue/" + _id + "/players";
 			return get<T>(url);
 		}
 
-		public T addPlayerToQueue<T>(string _id, T obj) where T: FQ.BaseBody{
+		public T[] getPlayers<T>(string queueId, string playerId) {
+			var url = baseUrl + "/queue/" + queueId + "/players/" + playerId;
+			return get<T>(url);
+		}
+
+		public T addPlayer<T>(string _id, T obj) where T: FQ.BaseBody{
 			var url = baseUrl + "/queue/" + _id + "/players";
 			return add<T>(url, obj);
 		}

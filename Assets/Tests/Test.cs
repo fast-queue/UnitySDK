@@ -30,8 +30,12 @@ public class Test : MonoBehaviour {
 		}
 	}
 
+	private void getPlayer(){
+		
+	}
+
 	public void getAllQueue(){
-		MyQueueClass[] x = api.getAllQueue<MyQueueClass>();
+		MyQueueClass[] x = api.getQueue<MyQueueClass>();
 		queue = x[0]._id;
 
 		// does the memory map update
@@ -63,9 +67,9 @@ public class Test : MonoBehaviour {
 		textName.text = resp.name;
 	}
 
-	public void addPlayerToQueue(string name){
+	public void addPlayer(string name){
 		MyPlayerClass player = new MyPlayerClass(name);
-		var pl = api.addPlayerToQueue<MyPlayerClass>(queue, player);
+		var pl = api.addPlayer<MyPlayerClass>(queue, player);
 	}
 
 }
