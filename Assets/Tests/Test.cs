@@ -16,6 +16,7 @@ public class Test : MonoBehaviour {
 
 	RestApi api;
 	string queue = "";
+	string player = "";
 
 	void Start(){
 		api = new RestApi(url, key);
@@ -30,8 +31,20 @@ public class Test : MonoBehaviour {
 		}
 	}
 
-	private void getPlayer(){
-		
+	public void getPlayers(){
+		MyPlayerClass[] x = api.getPlayers<MyPlayerClass>(queue);
+		string n = "";
+		player = x[0]._id;
+		foreach (var item in x){
+			n+= item._id + " -- ";
+		}
+
+		resText.text = n;
+	}
+	public void getPlayerInfo(){
+		MyPlayerClass x = api.getPlayers<MyPlayerClass>(queue, player);
+
+		resText.text = x.toJson();
 	}
 
 	public void getAllQueue(){
