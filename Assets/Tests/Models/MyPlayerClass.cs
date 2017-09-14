@@ -8,4 +8,8 @@ class MyPlayerClass : FQ.BaseBody {
         this.name = name;
     }
 
+    public new string toJson(){
+        return "{ name: " + this.name + ", _id: " + this._id + " }"; 
+    }
+
 }
