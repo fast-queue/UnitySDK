@@ -1,88 +1,141 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using FQ;
 using UnityEngine;
 using UnityEngine.UI;
-using FQ;
 
 public class Test : MonoBehaviour {
-	public Text resText;
-	public Text textName;
-	public Text id;
+    public Text resText;
+    public Text textName;
+    public Text id;
 
-	private Dictionary<string, MyQueueClass> maps;
+    private Dictionary<string, MyQueueClass> queues;
+    private Dictionary<string, MyPlayerClass> players;
 
-	const string url = "http://tcc-andre.ddns.net";
-	const string key = "minhavidaeandarporestepais";
+    const string url = "http://tcc-andre.ddns.net";
+    const string key = "minhavidaeandarporestepais";
 
-	RestApi api;
-	string queue = "";
-	string player = "";
+    RestApi api;
+    string queue = "";
+    string player = "";
 
-	void Start(){
-		api = new RestApi(url, key);
-		maps = new Dictionary<string, MyQueueClass> ();
-	}
+    void Start () {
+        api = new RestApi (url, key);
+        queues = new Dictionary<string, MyQueueClass> ();
+        players = new Dictionary<string, MyPlayerClass> ();
+    }
 
-	private void updateMap(MyQueueClass []q){
-		maps.Clear();
-		foreach (var item in q)
-		{
-			maps.Add(item._id, item);
-		}
-	}
+    // NAO GOSTEI
+    // FALAR COM O ALISSON PRA VER COMO A GENTE PODE RESOLVER
+    // O POLYMORFISMO NAO DEVERIA ACEITAR?
+    // TODO: 
+    private void updateMap<T> (Dictionary<string, T> map, T[] q) where T : BaseBody {
+        map.Clear ();
+        foreach (var item in q) {
+            map.Add (item._id, item);
+        }
+    }
 
-	public void getPlayers(){
-		MyPlayerClass[] x = api.getPlayers<MyPlayerClass>(queue);
-		string n = "";
-		player = x[0]._id;
-		foreach (var item in x){
-			n+= item._id + " -- ";
-		}
+    public void deletePlayer () {
+        if ((queue == "") || (player == "")){
+            Debug.Log("No queue and player selected");
+            return;
+        }
 
-		resText.text = n;
-	}
-	public void getPlayerInfo(){
-		MyPlayerClass x = api.getPlayers<MyPlayerClass>(queue, player);
+        var deleted = api.deletePlayer (queues[queue], players[player]);
+        resText.text = deleted._id;
+        player = "";
+    }
 
-		resText.text = x.toJson();
-	}
+    public void deleteQueue () {
+        if (queue == ""){
+            Debug.Log("No queue selected")
+            return;
+        }
+        var deleted = api.deleteQueue (queues[queue]);
+        resText.text = deleted._id;
+        queue = "";
+    }
 
-	public void getAllQueue(){
-		MyQueueClass[] x = api.getQueue<MyQueueClass>();
-		queue = x[0]._id;
+    public void getPlayers () {
+        if (queue == "") {
+            resText.text = "No Queue selected";
+            Debug.Log ("No Queue selected");
+            return;
+        }
+        MyPlayerClass[] x = api.getPlayers<MyPlayerClass> (queue);
+        if ((x == null) || (x.Length == 0)) {
+            Debug.Log ("No players in this Queue");
+            resText.text = "No players in this Queue";
+            return;
+        }
+        updateMap<MyPlayerClass> (players, x);
+        string n = "[";
+        player = x[0]._id;
+        for (int i = 0; i < x.Length; i++) {
+            n += x[i].toJson ();
+            if (x.Length - 1 != i)
+                n += ",";
+            else
+                n += "]";
+        }
+        resText.text = n;
+    }
+    public void getPlayerInfo () {
+        MyPlayerClass x = api.getPlayers<MyPlayerClass> (queue, player);
 
-		// does the memory map update
-		updateMap(x);
+        resText.text = x.toJson ();
+    }
 
-		textName.text = x[0].name;
-		id.text = x[0]._id;
+    public void getAllQueue () {
+        MyQueueClass[] x = api.getQueue<MyQueueClass> ();
+        if ((x == null) || (x.Length == 0)) {
+            Debug.Log ("No queue to show.");
+            resText.text = "No Queue";
+            return;
+        }
+        if (x.Length < 0)
+            return;
 
-		string output = "";
-		for (int i = 0; i < x.Length; i++)
-		{
-			output+= "{ name: " + x[i].name + ", _id: " + x[i]._id + "}";
-			if(i != x.Length){
-				output += ",";
-			}
-		}
+        queue = x[0]._id;
 
+        // does the memory map update
+        updateMap<MyQueueClass> (queues, x);
 
-		resText.text = output;
-	}
+        textName.text = x[0].name;
+        id.text = x[0]._id;
 
-	public void addQueue(string name){
-		MyQueueClass body = new MyQueueClass (name, 32);
-		var resp = api.addQueue<MyQueueClass> (body);
-		maps.Add (resp._id, resp);
+        string output = "";
+        for (int i = 0; i < x.Length; i++) {
+            output += x[0].toJson ();
+            if (i != x.Length) {
+                output += ",";
+            }
+        }
 
-		// set text on editor
-		id.text = resp._id;
-		textName.text = resp.name;
-	}
+        resText.text = output;
+    }
 
-	public void addPlayer(string name){
-		MyPlayerClass player = new MyPlayerClass(name);
-		var pl = api.addPlayer<MyPlayerClass>(queue, player);
-	}
+    public void getQueue () {
+        MyQueueClass x = api.getQueue<MyQueueClass> (queue);
+
+        resText.text = x.toJson ();
+
+    }
+
+    public void addQueue (string name) {
+        MyQueueClass body = new MyQueueClass (name, 32);
+        var resp = api.addQueue<MyQueueClass> (body);
+        queues.Add (resp._id, resp);
+
+        // set text on editor
+        id.text = resp._id;
+        textName.text = resp.name;
+    }
+
+    public void addPlayer (string name) {
+        MyPlayerClass player = new MyPlayerClass (name);
+        var pl = api.addPlayer<MyPlayerClass> (queue, player);
+    }
 
 }
