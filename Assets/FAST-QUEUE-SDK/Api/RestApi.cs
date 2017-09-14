@@ -28,11 +28,14 @@ namespace FQ {
 
 		public T[] getQueue<T>() {
 			var url = baseUrl + "/queue";
-			return get<T>(url);
+			var queues = get<T>(url);
+			if(queues.Length > 0)
+				return queues;
+			return null;
 		}
-		public T[] getQueue<T>(string id) {
+		public T getQueue<T>(string id) {
 			var url = baseUrl + "/queue/" + id;
-			return get<T>(url);
+			return getOne<T>(url);
 		}
 
 		public T[] getPlayers<T>(string _id) {
@@ -40,9 +43,9 @@ namespace FQ {
 			return get<T>(url);
 		}
 
-		public T[] getPlayers<T>(string queueId, string playerId) {
+		public T getPlayers<T>(string queueId, string playerId) {
 			var url = baseUrl + "/queue/" + queueId + "/players/" + playerId;
-			return get<T>(url);
+			return getOne<T>(url);
 		}
 
 		public T addPlayer<T>(string _id, T obj) where T: FQ.BaseBody{
@@ -69,6 +72,13 @@ namespace FQ {
 			var x = "{ objects:" + request + "}";
 			var response = convertPostResponse<getAllToWork<T>> (x);
 			return response.objects;
+		}
+
+		private T getOne<T>(string url){
+			var type = RequestType.Get;
+			var request = this.Send (url, type, null);
+			var response = convertPostResponse<T> (request);
+			return response;
 		}
 
 			
