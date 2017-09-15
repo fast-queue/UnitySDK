@@ -13,7 +13,7 @@ public class Test : MonoBehaviour {
     private Dictionary<string, MyPlayerClass> players;
 
     const string url = "http://tcc-andre.ddns.net";
-    const string key = "minhavidaeandarporestepais";
+    const string key = "testkeytoeveryone";
 
     RestApi api;
     string queue = "";
