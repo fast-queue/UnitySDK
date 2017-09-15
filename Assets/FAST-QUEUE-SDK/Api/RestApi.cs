@@ -18,6 +18,7 @@ namespace FQ {
             this.baseUrl = url;
             this.key = key;
         }
+
         public T deleteQueue<T> (T queue) where T : FQ.BaseBody {
             var url = baseUrl + "/queue/" + queue._id;
             return this.delete<T> (url);
@@ -50,32 +51,36 @@ namespace FQ {
             return null;
         }
 
-        public T getQueue<T> (string id) {
-            var url = baseUrl + "/queue/" + id;
+        public T getQueue<T> (T queue) where T : FQ.BaseBody {
+            var url = baseUrl + "/queue/" + queue._id;
             return getOne<T> (url);
         }
 
-        public T[] getPlayers<T> (string _id) {
-            var url = baseUrl + "/queue/" + _id + "/players";
-            return get<T> (url);
+        public K[] getPlayers<T, K> (T queue) where T : FQ.BaseBody
+                                              where K : FQ.BaseBody {
+            var url = baseUrl + "/queue/" + queue._id + "/players";
+            return get<K> (url);
         }
 
-        public T[] getPlayers<T> (string _id, string plugin) {
-            var url = baseUrl + "/queue/" + _id + "/players";            
+        public K[] getPlayers<T, K> (T queue, string plugin) where T : FQ.BaseBody
+                                                             where K : FQ.BaseBody {
+            var url = baseUrl + "/queue/" + queue._id + "/players";            
             if (plugin != null) {
                 url += "?callback=" + plugin;
             }
-            return get<T> (url);
+            return get<K> (url);
         }
 
-        public T getPlayer<T> (string queueId, string playerId) {
-            var url = baseUrl + "/queue/" + queueId + "/players/" + playerId;
-            return getOne<T> (url);
+        public K getPlayer<T, K> (T queueId, K playerId) where T : FQ.BaseBody 
+                                                         where K : FQ.BaseBody {
+            var url = baseUrl + "/queue/" + queueId._id + "/players/" + playerId._id;
+            return getOne<K> (url);
         }
 
-        public T getPlayer<T> (string queueId, string playerId, string plugin){
-            var url = baseUrl + "/queue/" + queueId + "/players/" + playerId + "?callback=" + plugin;
-            return getOne<T> (url);            
+        public K getPlayer<T, K> (T queue, K player, string plugin) where T : FQ.BaseBody 
+                                                                        where K : FQ.BaseBody{
+            var url = baseUrl + "/queue/" + queue._id + "/players/" + player._id + "?callback=" + plugin;
+            return getOne<K> (url);            
         }
 
         public K addPlayer<T, K> (T queue, K player) where T : FQ.BaseBody

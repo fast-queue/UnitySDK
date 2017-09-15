@@ -63,7 +63,7 @@ public class Test : MonoBehaviour {
             Debug.Log ("No Queue selected");
             return;
         }
-        MyPlayerClass[] x = api.getPlayers<MyPlayerClass> (queue);
+        MyPlayerClass[] x = api.getPlayers<MyQueueClass, MyPlayerClass> (queues[queue]);
         if ((x == null) || (x.Length == 0)) {
             Debug.Log ("No players in this Queue");
             resText.text = "No players in this Queue";
@@ -82,7 +82,7 @@ public class Test : MonoBehaviour {
         resText.text = n;
     }
     public void getPlayerInfo () {
-        MyPlayerClass x = api.getPlayer<MyPlayerClass> (queue, player);
+        MyPlayerClass x = api.getPlayer<MyQueueClass, MyPlayerClass> (queues[queue], players[player]);
 
         resText.text = x.toJson ();
     }
@@ -117,7 +117,7 @@ public class Test : MonoBehaviour {
     }
 
     public void getQueue () {
-        MyQueueClass x = api.getQueue<MyQueueClass> (queue);
+        MyQueueClass x = api.getQueue<MyQueueClass> (queues[queue]);
 
         resText.text = x.toJson ();
 
