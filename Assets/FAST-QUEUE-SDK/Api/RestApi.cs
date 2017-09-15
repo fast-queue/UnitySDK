@@ -24,7 +24,7 @@ namespace FQ {
         }
 
         public T deletePlayer<T, K> (T queue, K player) where T : FQ.BaseBody
-                                                        where K : FQ.BaseBody {
+        where K : FQ.BaseBody {
             var url = baseUrl + "/queue/" + queue._id + "/players/" + player._id;
             return this.delete<T> (url);
         }
@@ -34,13 +34,22 @@ namespace FQ {
             return add (url, obj);
         }
 
-        public T[] getQueue<T> () {
+        public T[] getAllQueue<T> (){
             var url = baseUrl + "/queue";
             var queues = get<T> (url);
             if (queues.Length > 0)
                 return queues;
             return null;
         }
+
+        public T[] getAllQueue<T> (string plugin) {
+            var url = baseUrl + "/queue?callback=" + plugin;
+            var queues = get<T> (url);
+            if (queues.Length > 0)
+                return queues;
+            return null;
+        }
+
         public T getQueue<T> (string id) {
             var url = baseUrl + "/queue/" + id;
             return getOne<T> (url);
@@ -51,9 +60,22 @@ namespace FQ {
             return get<T> (url);
         }
 
-        public T getPlayers<T> (string queueId, string playerId) {
+        public T[] getPlayers<T> (string _id, string plugin) {
+            var url = baseUrl + "/queue/" + _id + "/players";            
+            if (plugin != null) {
+                url += "?callback=" + plugin;
+            }
+            return get<T> (url);
+        }
+
+        public T getPlayer<T> (string queueId, string playerId) {
             var url = baseUrl + "/queue/" + queueId + "/players/" + playerId;
             return getOne<T> (url);
+        }
+
+        public T getPlayer<T> (string queueId, string playerId, string plugin){
+            var url = baseUrl + "/queue/" + queueId + "/players/" + playerId + "?callback=" + plugin;
+            return getOne<T> (url);            
         }
 
         public T addPlayer<T> (string _id, T obj) where T : FQ.BaseBody {

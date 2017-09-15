@@ -49,7 +49,7 @@ public class Test : MonoBehaviour {
 
     public void deleteQueue () {
         if (queue == ""){
-            Debug.Log("No queue selected")
+            Debug.Log("No queue selected");
             return;
         }
         var deleted = api.deleteQueue (queues[queue]);
@@ -82,13 +82,13 @@ public class Test : MonoBehaviour {
         resText.text = n;
     }
     public void getPlayerInfo () {
-        MyPlayerClass x = api.getPlayers<MyPlayerClass> (queue, player);
+        MyPlayerClass x = api.getPlayer<MyPlayerClass> (queue, player);
 
         resText.text = x.toJson ();
     }
 
     public void getAllQueue () {
-        MyQueueClass[] x = api.getQueue<MyQueueClass> ();
+        MyQueueClass[] x = api.getAllQueue<MyQueueClass> ();
         if ((x == null) || (x.Length == 0)) {
             Debug.Log ("No queue to show.");
             resText.text = "No Queue";
