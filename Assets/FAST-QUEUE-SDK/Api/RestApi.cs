@@ -25,7 +25,7 @@ namespace FQ {
         }
 
         public T deletePlayer<T, K> (T queue, K player) where T : FQ.BaseBody
-        where K : FQ.BaseBody {
+                                                        where K : FQ.BaseBody {
             var url = baseUrl + "/queue/" + queue._id + "/players/" + player._id;
             return this.delete<T> (url);
         }
