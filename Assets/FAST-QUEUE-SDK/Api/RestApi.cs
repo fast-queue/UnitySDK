@@ -78,9 +78,10 @@ namespace FQ {
             return getOne<T> (url);            
         }
 
-        public T addPlayer<T> (string _id, T obj) where T : FQ.BaseBody {
-            var url = baseUrl + "/queue/" + _id + "/players";
-            return add<T> (url, obj);
+        public K addPlayer<T, K> (T queue, K player) where T : FQ.BaseBody
+                                                     where K : FQ.BaseBody {
+            var url = baseUrl + "/queue/" + queue._id + "/players";
+            return add<K> (url, player);
         }
 
         private T add<T> (string url, T obj) where T : FQ.BaseBody {

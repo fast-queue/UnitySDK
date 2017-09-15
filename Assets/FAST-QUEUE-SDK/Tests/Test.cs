@@ -135,7 +135,7 @@ public class Test : MonoBehaviour {
 
     public void addPlayer (string name) {
         MyPlayerClass player = new MyPlayerClass (name);
-        var pl = api.addPlayer<MyPlayerClass> (queue, player);
+        var pl = api.addPlayer<MyQueueClass, MyPlayerClass> (queues[queue], player);
     }
 
 }
