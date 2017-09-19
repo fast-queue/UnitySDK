@@ -9,7 +9,7 @@ Thanks
 
 ## Installation ##
 
-Download the package from [Release]() page, import on UNITY and use.
+Download the package from [Release](https://github.com/fast-queue/UnitySDK/releases) page, import on UNITY and use.
 
 
 ## Documentation ##
@@ -22,7 +22,7 @@ Functions at index module.
 ## Usage ## 
 
 ### Basic ##
-There is a [this](https://github.com/fast-queue/UnitySDK/blob/master/Assets/FAST-QUEUE-SDK/Model/BaseBody.cs) class that are the base for all request that includes something in the system, so, all models that you develop, (your queue class, player class) should extends from this class to be able to communicate with the server.
+There is [this](https://github.com/fast-queue/UnitySDK/blob/master/Assets/FAST-QUEUE-SDK/Model/BaseBody.cs) class that are the base for all request that includes something in the system, so, all models that you develop, (your queue class, player class) should extends from this class to be able to communicate with the server.
 All attributes from the class that need to be sent to the server have to be public, because the JSON api from UNITY only parse if the attribute from class are public.
 
 Ex:
