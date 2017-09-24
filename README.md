@@ -40,34 +40,37 @@ And it is needed for the Queue class too.
 Here is a more complete example: 
 
 ```C#
-class MyQueue: FQ.BaseBody {
-
-    private Manager manager;
+public class Queue : FQ.BaseBody{
     public int minRanking;
     public int maxPlayers;
 
     // Initialize the queue
-    public MyQueue(int minRanking, int maxPlayers) {
-        this.manager = My.Manager.GetInstance();
+    public Queue(int minRanking, int maxPlayers)
+    {
         this.minRanking = minRanking;
         this.maxPlayers = maxPlayers;
         // add the queue to the server when it's initilized
-        this._id = manager.api.addQueue<MyQueue>(this)._id; // get the id from the server
+        this._id = Manager.Instance.api.addQueue<Queue>(this)._id; // get the id from the server
     }
 
     // Delete the instance of the queue on server-side when it's deleted
-    ~MyQueue(){
-        manager.api.deleteQueue<MyQueue>(this);
+    ~Queue
+        ()
+    {
+        Manager.Instance.api.deleteQueue<Queue>(this);
     }
 
     // Simple player quantity controll.
-    public boolean addPlayer(MyPlayer player){
-        if( manager.api.getPlayers<MyPlayer>(this._id).Lenght >= this.maxPlayers){
+    public bool addPlayer(Player player)
+    {
+        if (Manager.Instance.api.getPlayers<Queue, Player>(this).Length >= this.maxPlayers)
+        {
             return false;
         }
-        manager.api.addPlayer<MyPlayer>(player);
+        Manager.Instance.api.addPlayer<Queue, Player>(this, player);
         return true;
     }
+
 }
 ```
 
