@@ -12,7 +12,11 @@ public class Test : MonoBehaviour {
     private Dictionary<string, MyQueueClass> queues;
     private Dictionary<string, MyPlayerClass> players;
 
+<<<<<<< HEAD
     const string url = "http://fq-api.bovendorp.org";
+=======
+    const string url = "https://fq-api.bovendorp.org";
+>>>>>>> 51aa9305ae6088daa3fb0291a03f19a38a28754d
     const string key = "testkeytoeveryone";
 
     RestApi api;

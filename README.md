@@ -9,7 +9,7 @@ Thanks
 
 ## Installation ##
 
-Download the package from [Release]() page, import on UNITY and use.
+Download the package from [Release](https://github.com/fast-queue/UnitySDK/releases) page, import on UNITY and use.
 
 
 ## Documentation ##
@@ -22,7 +22,7 @@ Functions at index module.
 ## Usage ## 
 
 ### Basic ##
-There is a [this](https://github.com/fast-queue/UnitySDK/blob/master/Assets/FAST-QUEUE-SDK/Model/BaseBody.cs) class that are the base for all request that includes something in the system, so, all models that you develop, (your queue class, player class) should extends from this class to be able to communicate with the server.
+There is [this](https://github.com/fast-queue/UnitySDK/blob/master/Assets/FAST-QUEUE-SDK/Model/BaseBody.cs) class that are the base for all request that includes something in the system, so, all models that you develop, (your queue class, player class) should extends from this class to be able to communicate with the server.
 All attributes from the class that need to be sent to the server have to be public, because the JSON api from UNITY only parse if the attribute from class are public.
 
 Ex:
@@ -40,34 +40,37 @@ And it is needed for the Queue class too.
 Here is a more complete example: 
 
 ```C#
-class MyQueue: FQ.BaseBody {
-
-    private Manager manager;
+public class Queue : FQ.BaseBody{
     public int minRanking;
     public int maxPlayers;
 
     // Initialize the queue
-    public MyQueue(int minRanking, int maxPlayers) {
-        this.manager = My.Manager.GetInstance();
+    public Queue(int minRanking, int maxPlayers)
+    {
         this.minRanking = minRanking;
         this.maxPlayers = maxPlayers;
         // add the queue to the server when it's initilized
-        this._id = manager.api.addQueue<MyQueue>(this)._id; // get the id from the server
+        this._id = Manager.Instance.api.addQueue<Queue>(this)._id; // get the id from the server
     }
 
     // Delete the instance of the queue on server-side when it's deleted
-    ~MyQueue(){
-        manager.api.deleteQueue<MyQueue>(this);
+    ~Queue
+        ()
+    {
+        Manager.Instance.api.deleteQueue<Queue>(this);
     }
 
     // Simple player quantity controll.
-    public boolean addPlayer(MyPlayer player){
-        if( manager.api.getPlayers<MyPlayer>(this._id).Lenght >= this.maxPlayers){
+    public bool addPlayer(Player player)
+    {
+        if (Manager.Instance.api.getPlayers<Queue, Player>(this).Length >= this.maxPlayers)
+        {
             return false;
         }
-        manager.api.addPlayer<MyPlayer>(player);
+        Manager.Instance.api.addPlayer<Queue, Player>(this, player);
         return true;
     }
+
 }
 ```
 
